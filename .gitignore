@@ -1,0 +1,8 @@
+analysis
+datasets
+dinov2
+__pycache__
+results
+pretrained
+paper
+.DS_Store
