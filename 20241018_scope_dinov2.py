@@ -40,20 +40,20 @@ import argparse
 from datetime import datetime
 
 # dino v1
-params = {
-    'patch_size': 16,
-    'ssl_checkpoint': 'pretrained/dino_deitsmall16_pretrain.pth',
-    'depth_checkpoint': 'Intel/dpt-hybrid-midas',
-    'img_size': None
-}
+#params = {
+#    'patch_size': 16,
+#    'ssl_checkpoint': 'pretrained/dino_deitsmall16_pretrain.pth',
+#    'depth_checkpoint': 'Intel/dpt-hybrid-midas',
+#    'img_size': None
+#}
 
 # dino v2
-#params = {
-#    'patch_size': 14,
-#    'ssl_checkpoint': 'pretrained/dinov2_vits14_reg4_pretrain.pth',
-#    'depth_checkpoint': 'Intel/dpt-beit-base-384',
-#    'img_size': 526
-#}
+params = {
+    'patch_size': 14,
+    'ssl_checkpoint': 'pretrained/dinov2_vits14_reg4_pretrain.pth',
+    'depth_checkpoint': 'Intel/dpt-beit-base-384',
+    'img_size': 526
+}
 
 # Set the device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -166,8 +166,8 @@ for i, img_name in enumerate(progress_bar):
     img_paded = img_tensor_padded(img_tensor, patch_size).to(device)
 
     # Load the SSL model
-    model = load_dino1_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
-    #model = load_dino2_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
+    #model = load_dino1_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
+    model = load_dino2_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
     model.to(device)
     model.eval()
 

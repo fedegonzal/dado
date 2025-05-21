@@ -45,21 +45,21 @@ from scipy.signal import find_peaks
 
 
 # dino v1
-params = {
-    'patch_size': 16,
-    'ssl_checkpoint': 'pretrained/dino_deitsmall16_pretrain.pth',
+#params = {
+#    'patch_size': 16,
+#    'ssl_checkpoint': 'pretrained/dino_deitsmall16_pretrain.pth',
 #    'depth_checkpoint': 'Intel/dpt-hybrid-midas',
-    'depth_checkpoint': 'Intel/dpt-beit-base-384',
-    'img_size': None
-}
+#    'depth_checkpoint': 'Intel/dpt-beit-base-384',
+#    'img_size': None
+#}
 
 # dino v2
-#params = {
-#    'patch_size': 14,
-#    'ssl_checkpoint': 'pretrained/dinov2_vits14_reg4_pretrain.pth',
-#    'depth_checkpoint': 'Intel/dpt-beit-base-384',
-#    'img_size': 526
-#}
+params = {
+    'patch_size': 14,
+    'ssl_checkpoint': 'pretrained/dinov2_vits14_reg4_pretrain.pth',
+    'depth_checkpoint': 'Intel/dpt-beit-base-384',
+    'img_size': 526
+}
 
 # Set the device
 device = torch.device("mps")
@@ -101,8 +101,8 @@ else:
 
 # Get N random images from dataset_path
 # n=None to get all images
-# dataset_path = "datasets/VOC2007/VOCdevkit/VOC2007"
-dataset_path = "datasets/VOC2012/VOC2012/"
+dataset_path = "datasets/VOC2007/VOCdevkit/VOC2007"
+# dataset_path = "datasets/VOC2012/VOC2012/"
 
 images = get_images(dataset_path, -1)
 
@@ -132,11 +132,7 @@ for i, img_name in enumerate(progress_bar):
 
         if (line):
 
-            try:
-                name_file = line.split(",")[1]
-            except Exception as e:
-                print(f"Error reading line {i}: {e}")
-                continue
+            img_name_file = line.split(",")[1]
 
             # if img_name is in results_file, we skip it
             if (img_name in line):
@@ -178,11 +174,7 @@ for i, img_name in enumerate(progress_bar):
     img_tensor = load_image_as_tensor(pil_img).to(device)
 
     # Get the ground truth
-    try:
-        ground_truth, ground_truth_img = get_ground_truth_voc2007(annotation_path, pil_img)
-    except Exception as e:
-        print(f"Error reading ground truth for {img_name}: {e}")
-        continue
+    ground_truth, ground_truth_img = get_ground_truth_voc2007(annotation_path, pil_img)
 
     #plt.imshow(ground_truth_img)
     #plt.show()
@@ -196,8 +188,8 @@ for i, img_name in enumerate(progress_bar):
     img_paded = img_tensor_padded(img_tensor, patch_size).to(device)
 
     # Load the SSL model
-    model = load_dino1_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
-    #model = load_dino2_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
+    #model = load_dino1_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
+    model = load_dino2_model(patch_size, params['ssl_checkpoint'], device, params['img_size'])
     model.to(device)
     model.eval()
 
